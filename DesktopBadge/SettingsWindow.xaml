@@ -1,0 +1,279 @@
+<Window x:Class="DesktopBadge.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Desktop Badge Settings"
+        Width="492"
+        Height="820"
+        MinWidth="470"
+        MinHeight="560"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        ShowInTaskbar="False"
+        Background="{StaticResource BgBrush}"
+        Foreground="{StaticResource TextBrush}"
+        FontFamily="Segoe UI Variable Text, Segoe UI"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Focusable="False">
+            <StackPanel Margin="26,22,26,22">
+
+                <Grid>
+                    <TextBlock Text="Desktop Badge" Style="{StaticResource Title}" />
+                    <TextBlock x:Name="VersionText"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Style="{StaticResource Subtitle}" />
+                </Grid>
+                <TextBlock Text="A small, always-on label for the virtual desktop you are using."
+                           Style="{StaticResource Subtitle}"
+                           Margin="0,4,0,0" />
+
+                <!-- Preview -->
+                <Border CornerRadius="10"
+                        BorderBrush="{StaticResource StrokeBrush}"
+                        BorderThickness="1"
+                        Height="104"
+                        Margin="0,18,0,0"
+                        ClipToBounds="True">
+                    <Grid>
+                        <Grid.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#FF1D2638" Offset="0" />
+                                <GradientStop Color="#FF12141C" Offset="1" />
+                            </LinearGradientBrush>
+                        </Grid.Background>
+                        <TextBlock Text="PREVIEW"
+                                   FontSize="9"
+                                   FontWeight="Bold"
+                                   Foreground="#66FFFFFF"
+                                   Margin="10,8,0,0"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" />
+                        <Grid x:Name="PreviewRotator"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center">
+                            <Grid.LayoutTransform>
+                                <RotateTransform x:Name="PreviewRotation" Angle="0" />
+                            </Grid.LayoutTransform>
+                            <Border x:Name="PreviewPill"
+                                    CornerRadius="8"
+                                    BorderThickness="1"
+                                    BorderBrush="#40FFFFFF"
+                                    Padding="12,5"
+                                    Background="#4C8DFF">
+                                <TextBlock x:Name="PreviewLabel"
+                                           Text="Desktop 1"
+                                           FontFamily="Segoe UI Variable Display, Segoe UI"
+                                           FontWeight="SemiBold"
+                                           FontSize="12.5"
+                                           Foreground="White"
+                                           MaxWidth="280"
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="NoWrap" />
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource Divider}" />
+
+                <!-- Position -->
+                <TextBlock Text="POSITION" Style="{StaticResource SectionTitle}" />
+                <Grid x:Name="PositionGrid" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ToggleButton x:Name="PosTopLeft" Grid.Row="0" Grid.Column="0" Tag="TopLeft"
+                                  Style="{StaticResource PadToggle}" Content="&#x2196;" Margin="2"
+                                  ToolTip="Top left" />
+                    <ToggleButton x:Name="PosTopCenter" Grid.Row="0" Grid.Column="1" Tag="TopCenter"
+                                  Style="{StaticResource PadToggle}" Content="&#x2191;" Margin="2"
+                                  ToolTip="Top centre" />
+                    <ToggleButton x:Name="PosTopRight" Grid.Row="0" Grid.Column="2" Tag="TopRight"
+                                  Style="{StaticResource PadToggle}" Content="&#x2197;" Margin="2"
+                                  ToolTip="Top right" />
+                    <ToggleButton x:Name="PosMiddleLeft" Grid.Row="1" Grid.Column="0" Tag="MiddleLeft"
+                                  Style="{StaticResource PadToggle}" Content="&#x2190;" Margin="2"
+                                  ToolTip="Middle left" />
+                    <ToggleButton x:Name="PosFree" Grid.Row="1" Grid.Column="1" Tag="Free"
+                                  Style="{StaticResource PadToggle}" Content="Free" Margin="2"
+                                  FontFamily="Segoe UI Variable Text, Segoe UI" FontSize="11"
+                                  ToolTip="Free position - drag the badge anywhere" />
+                    <ToggleButton x:Name="PosMiddleRight" Grid.Row="1" Grid.Column="2" Tag="MiddleRight"
+                                  Style="{StaticResource PadToggle}" Content="&#x2192;" Margin="2"
+                                  ToolTip="Middle right" />
+                    <ToggleButton x:Name="PosBottomLeft" Grid.Row="2" Grid.Column="0" Tag="BottomLeft"
+                                  Style="{StaticResource PadToggle}" Content="&#x2199;" Margin="2"
+                                  ToolTip="Bottom left" />
+                    <ToggleButton x:Name="PosBottomCenter" Grid.Row="2" Grid.Column="1" Tag="BottomCenter"
+                                  Style="{StaticResource PadToggle}" Content="&#x2193;" Margin="2"
+                                  ToolTip="Bottom centre" />
+                    <ToggleButton x:Name="PosBottomRight" Grid.Row="2" Grid.Column="2" Tag="BottomRight"
+                                  Style="{StaticResource PadToggle}" Content="&#x2198;" Margin="2"
+                                  ToolTip="Bottom right" />
+                </Grid>
+                <TextBlock Style="{StaticResource Hint}"
+                           Margin="2,10,2,0"
+                           Text="Presets anchor to the monitor the badge is on. Choose Free, then drag the badge to any exact spot - the position is remembered." />
+
+                <Border Style="{StaticResource Divider}" />
+
+                <!-- Orientation and size -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="18" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="ORIENTATION" Style="{StaticResource SectionTitle}" />
+                        <UniformGrid Columns="2">
+                            <ToggleButton x:Name="OrientationHorizontal" Content="Horizontal" Margin="2"
+                                          Style="{StaticResource SegmentToggle}" ToolTip="Normal, wide label" />
+                            <ToggleButton x:Name="OrientationVertical" Content="Vertical" Margin="2"
+                                          Style="{StaticResource SegmentToggle}" ToolTip="Rotated 90 degrees - useful along a side edge" />
+                        </UniformGrid>
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Margin="2,7,2,0"
+                                   Text="Vertical rotates the label for side edges." />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="SIZE" Style="{StaticResource SectionTitle}" />
+                        <UniformGrid Columns="3">
+                            <ToggleButton x:Name="SizeSmall" Content="S" Margin="2"
+                                          Style="{StaticResource SegmentToggle}" ToolTip="Small" />
+                            <ToggleButton x:Name="SizeMedium" Content="M" Margin="2"
+                                          Style="{StaticResource SegmentToggle}" ToolTip="Medium" />
+                            <ToggleButton x:Name="SizeLarge" Content="L" Margin="2"
+                                          Style="{StaticResource SegmentToggle}" ToolTip="Large" />
+                        </UniformGrid>
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Margin="2,7,2,0"
+                                   Text="Text scale of the badge." />
+                    </StackPanel>
+                </Grid>
+
+                <Border Style="{StaticResource Divider}" />
+
+                <!-- Opacity and content -->
+                <Grid>
+                    <TextBlock Text="OPACITY" Style="{StaticResource SectionTitle}" />
+                    <TextBlock x:Name="OpacityValue"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               FontSize="11"
+                               Foreground="{StaticResource MutedBrush}" />
+                </Grid>
+                <Slider x:Name="OpacitySlider"
+                        Minimum="35"
+                        Maximum="100"
+                        TickFrequency="1"
+                        IsSnapToTickEnabled="True"
+                        Margin="2,0,2,0" />
+
+                <CheckBox x:Name="ShowIndexCheck"
+                          Content="Show the desktop number before the name"
+                          Margin="2,10,0,0" />
+
+                <Border Style="{StaticResource Divider}" />
+
+                <!-- Colours -->
+                <TextBlock Text="COLOUR PER DESKTOP" Style="{StaticResource SectionTitle}" />
+                <TextBlock Style="{StaticResource Hint}"
+                           Margin="2,0,2,10"
+                           Text="Every desktop gets a unique colour from the 16-colour palette. Select a desktop, then pick a swatch." />
+
+                <ListBox x:Name="DesktopList" Height="112">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="22" />
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border Width="12" Height="12" CornerRadius="3"
+                                        Background="{Binding Brush}"
+                                        VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="1" Text="{Binding Number}"
+                                           Foreground="{StaticResource MutedBrush}"
+                                           FontSize="11" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="{Binding Name}"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center" />
+                                <Border Grid.Column="3" Background="#22FFFFFF" CornerRadius="4"
+                                        Padding="6,1" Visibility="{Binding CurrentMark}">
+                                    <TextBlock Text="current" FontSize="10"
+                                               Foreground="{StaticResource MutedBrush}" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <UniformGrid x:Name="PaletteGrid" Columns="8" Rows="2" Margin="0,8,0,0" />
+
+                <Grid Margin="2,6,2,0">
+                    <TextBlock x:Name="ColorStatus" Style="{StaticResource Hint}" VerticalAlignment="Center" />
+                    <Button x:Name="AutoColorButton" Content="Auto"
+                            Style="{StaticResource GhostButton}"
+                            Width="64" Padding="6,4"
+                            HorizontalAlignment="Right"
+                            ToolTip="Reassign this desktop's colour automatically" />
+                </Grid>
+
+                <Border Style="{StaticResource Divider}" />
+
+                <!-- Behaviour -->
+                <CheckBox x:Name="LockCheck"
+                          Content="Lock badge (click-through, cannot be dragged)"
+                          Margin="2,0,0,0" />
+                <CheckBox x:Name="StartupCheck"
+                          Content="Start with Windows"
+                          Margin="2,9,0,0" />
+
+                <TextBlock Style="{StaticResource Hint}"
+                           Margin="2,16,2,0"
+                           Text="Settings are saved automatically. Colours are keyed to each desktop's ID, so they follow renames and restarts." />
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="1"
+                Background="#FF131318"
+                BorderBrush="{StaticResource StrokeBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="26,11">
+            <Grid>
+                <TextBlock x:Name="FooterStatus"
+                           Text="Changes apply instantly."
+                           Style="{StaticResource Hint}"
+                           VerticalAlignment="Center" />
+                <Button x:Name="CloseButton" Content="Close"
+                        Style="{StaticResource PrimaryButton}"
+                        HorizontalAlignment="Right" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
