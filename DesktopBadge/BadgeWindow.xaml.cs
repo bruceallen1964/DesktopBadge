@@ -86,7 +86,11 @@ public partial class BadgeWindow : Window
     public void ApplySettings()
     {
         if (_hwnd != IntPtr.Zero)
+        {
             NativeMethods.SetClickThrough(_hwnd, _settings.Locked);
+            // Reassert topmost after SetWindowLong calls (SetClickThrough modifies extended styles).
+            NativeMethods.SetTopmost(_hwnd, true);
+        }
 
         Cursor = _settings.Locked ? Cursors.Arrow : Cursors.SizeAll;
         DragOutline.Visibility = _settings.Locked ? Visibility.Collapsed : Visibility.Visible;
@@ -187,6 +191,11 @@ public partial class BadgeWindow : Window
 
         _hwnd = new WindowInteropHelper(this).Handle;
         NativeMethods.MakeOverlay(_hwnd);
+
+        // Explicitly set topmost z-order. WPF's Topmost="True" in XAML is not
+        // always reliable when extended styles are modified via SetWindowLong,
+        // because WS_EX_TOPMOST is stored separately from the extended style.
+        NativeMethods.SetTopmost(_hwnd, true);
 
         // Invisible until the first successful placement avoids a flash in the corner.
         Opacity = 0;
@@ -298,6 +307,9 @@ public partial class BadgeWindow : Window
     void LayoutNow()
     {
         if (_hwnd == IntPtr.Zero || _dragging) return;
+
+        // Periodically reassert topmost to fight Windows z-order quirks.
+        NativeMethods.SetTopmost(_hwnd, true);
 
         _layoutRunning = true;
         try

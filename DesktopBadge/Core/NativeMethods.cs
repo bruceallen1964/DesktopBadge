@@ -38,6 +38,9 @@ internal static class NativeMethods
     [DllImport("user32.dll", EntryPoint = "SetWindowLongW", SetLastError = true)]
     static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
+    public const int HWND_TOPMOST = -1;
+    public const int HWND_NOTOPMOST = -2;
+
     [DllImport("user32.dll", SetLastError = true)]
     public static extern bool SetWindowPos(
         IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
@@ -70,6 +73,13 @@ internal static class NativeMethods
         {
             SetWindowLong(hwnd, GWL_EXSTYLE, check | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE);
         }
+    }
+
+    /// <summary>Explicitly sets the window's topmost z-order state.</summary>
+    public static void SetTopmost(IntPtr hwnd, bool topmost)
+    {
+        var hWndInsertAfter = topmost ? new IntPtr(HWND_TOPMOST) : new IntPtr(HWND_NOTOPMOST);
+        SetWindowPos(hwnd, hWndInsertAfter, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
     }
 
     public static void SetClickThrough(IntPtr hwnd, bool enabled)
