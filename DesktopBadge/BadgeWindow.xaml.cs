@@ -15,6 +15,7 @@ public partial class BadgeWindow : Window
 {
     readonly AppSettings _settings;
     readonly DispatcherTimer _reflowTimer;
+    readonly DispatcherTimer _topmostTimer;
 
     IntPtr _hwnd;
     DesktopInfo? _desktop;
@@ -57,6 +58,19 @@ public partial class BadgeWindow : Window
         Closed += OnClosed;
 
         SystemEvents.DisplaySettingsChanged += OnDisplaySettingsChanged;
+
+        // Safety timer: periodically reassert topmost to fight Windows z-order quirks
+        // where other applications (e.g. tray popups) can appear above the badge.
+        _topmostTimer = new DispatcherTimer(DispatcherPriority.Normal)
+        {
+            Interval = TimeSpan.FromSeconds(2)
+        };
+        _topmostTimer.Tick += (_, _) =>
+        {
+            if (_hwnd != IntPtr.Zero)
+                NativeMethods.SetTopmost(_hwnd, true);
+        };
+        _topmostTimer.Start();
     }
 
     public void SetDesktop(DesktopInfo desktop, Color color)
@@ -421,5 +435,6 @@ public partial class BadgeWindow : Window
     void OnClosed(object? sender, EventArgs e)
     {
         SystemEvents.DisplaySettingsChanged -= OnDisplaySettingsChanged;
+        _topmostTimer?.Stop();
     }
 }

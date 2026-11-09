@@ -9,11 +9,13 @@ internal static class NativeMethods
     public const int WS_EX_TRANSPARENT = 0x00000020;
     public const int WS_EX_TOOLWINDOW = 0x00000080;
     public const int WS_EX_NOACTIVATE = 0x08000000;
+    public const int WS_EX_TOPMOST = 0x00000008;
 
     public const int WM_MOUSEACTIVATE = 0x0021;
     public const int MA_NOACTIVATE = 3;
 
     const uint SWP_NOSIZE = 0x0001;
+    const uint SWP_NOMOVE = 0x0002;
     const uint SWP_NOZORDER = 0x0004;
     const uint SWP_NOACTIVATE = 0x0010;
     const uint MONITOR_DEFAULTTONEAREST = 2;
@@ -66,12 +68,15 @@ internal static class NativeMethods
     public static void MakeOverlay(IntPtr hwnd)
     {
         var ex = GetWindowLong(hwnd, GWL_EXSTYLE);
-        SetWindowLong(hwnd, GWL_EXSTYLE, ex | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE);
+        // Removed WS_EX_TOOLWINDOW: it puts the window in a separate z-order group
+        // that can conflict with Topmost behavior, allowing other apps' topmost
+        // windows (e.g. tray popups) to appear above the badge.
+        SetWindowLong(hwnd, GWL_EXSTYLE, ex | WS_EX_NOACTIVATE);
         // Make sure WPF's layered style survives our edit.
         var check = GetWindowLong(hwnd, GWL_EXSTYLE);
         if ((check & WS_EX_NOACTIVATE) == 0)
         {
-            SetWindowLong(hwnd, GWL_EXSTYLE, check | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE);
+            SetWindowLong(hwnd, GWL_EXSTYLE, check | WS_EX_NOACTIVATE);
         }
     }
 
@@ -79,7 +84,7 @@ internal static class NativeMethods
     public static void SetTopmost(IntPtr hwnd, bool topmost)
     {
         var hWndInsertAfter = topmost ? new IntPtr(HWND_TOPMOST) : new IntPtr(HWND_NOTOPMOST);
-        SetWindowPos(hwnd, hWndInsertAfter, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+        SetWindowPos(hwnd, hWndInsertAfter, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
     }
 
     public static void SetClickThrough(IntPtr hwnd, bool enabled)
